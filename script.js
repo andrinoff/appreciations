@@ -17,7 +17,7 @@ const appreciationMessages = [
                 messageElement.className = 'bg-gray-900 p-6 rounded-lg shadow-lg relative';
                 messageElement.innerHTML = `
                     <div class="absolute top-0 right-0 -mt-3 -mr-3 text-3xl">💬</div>
-                    <p class="text-lg italic text-gray-300">"${msg.quote}"</p>
+                    <p class="text-lg italic text-gray-300">${msg.quote}</p>
                     <p class="text-right mt-4 font-semibold text-gray-500">- ${msg.source}</p>
                 `;
                 scrollerInner.appendChild(messageElement);

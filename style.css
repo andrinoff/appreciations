@@ -1,12 +1,7 @@
 body {
-        font-family: 'Inter', sans-serif;
+        font-family: monospace
     }
-    .gradient-text {
-        background-clip: text;
-        -webkit-background-clip: text;
-        color: transparent;
-        background-image: linear-gradient(to right, #60A5FA, #EC4899);
-    }
+    
     .card-hover:hover {
         transform: translateY(-5px);
         box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
@@ -41,6 +36,6 @@ body {
 
     @keyframes scroll {
         to {
-            transform: translateY(-50%);
+            transform: translateY(-500%);
         }
     }

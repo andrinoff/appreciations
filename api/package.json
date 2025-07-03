@@ -1,0 +1,23 @@
+{
+  "name": "appreciations",
+  "version": "1.0.0",
+  "description": "**Appreciation Wall - Hyprland Theme**",
+  "homepage": "https://github.com/andrinoff/appreciations#readme",
+  "bugs": {
+    "url": "https://github.com/andrinoff/appreciations/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andrinoff/appreciations.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "database.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.50.3"
+  }
+}

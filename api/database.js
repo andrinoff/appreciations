@@ -71,7 +71,7 @@ export default async function handler(req, res) {
     // --- Step 5: Insert Data into Database ---
     console.log("Attempting to insert into 'appreciations' table...");
     const { data, error } = await supabaseClient
-      .from("appreciations")
+      .from("Appreciations")
       .insert({
         text: text,
         author_name: author_name || null,

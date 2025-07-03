@@ -1,27 +1,202 @@
-<!doctype html>
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Appreciations | andrinoff</title>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-            href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&display=swap"
-            rel="stylesheet"
-        />
-        <link rel="stylesheet" href="style.css" />
+        <title>Share an Appreciation</title>
+        <!-- Tailwind CSS for styling -->
+        <script src="https://cdn.tailwindcss.com"></script>
+        <style>
+            /* A simple fade-in animation for the alert messages */
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(-10px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+            .alert-message {
+                animation: fadeIn 0.3s ease-out;
+            }
+        </style>
     </head>
-    <body>
-        <main class="widget-card">
-            <h1 class="widget-title">~/appreciations.log</h1>
-            <div class="scroller" id="scroller">
-                <div class="scroller-inner" id="scroller-inner">
-                    <!-- Messages will be populated here by JavaScript -->
-                </div>
+    <body
+        class="bg-gray-50 flex items-center justify-center min-h-screen font-sans p-4"
+    >
+        <main
+            class="max-w-xl w-full mx-auto p-8 bg-white rounded-xl shadow-lg space-y-6"
+        >
+            <div class="text-center">
+                <h1 class="text-3xl font-bold text-gray-800">
+                    Share an Appreciation
+                </h1>
+                <p class="text-gray-500 mt-2">
+                    This will be displayed on
+                    <a href="https://andrinoff.com">my website</a>
+                </p>
             </div>
+
+            <!-- The Form -->
+            <form id="appreciationForm" class="space-y-6">
+                <!-- Appreciation Text Area -->
+                <div>
+                    <label
+                        for="appreciation-text"
+                        class="block text-sm font-medium text-gray-700 mb-1"
+                    >
+                        Appreciation Message
+                    </label>
+                    <textarea
+                        id="appreciation-text"
+                        name="text"
+                        rows="4"
+                        class="w-full px-3 py-2 text-gray-700 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-150"
+                        placeholder="Write your message here..."
+                        required
+                    ></textarea>
+                </div>
+
+                <!-- Author Name Input -->
+                <div>
+                    <label
+                        for="author-name"
+                        class="block text-sm font-medium text-gray-700 mb-1"
+                    >
+                        Your Name (Optional)
+                    </label>
+                    <input
+                        id="author-name"
+                        name="author_name"
+                        type="text"
+                        class="w-full px-3 py-2 text-gray-700 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-150"
+                        placeholder="Leave blank to submit anonymously"
+                    />
+                </div>
+
+                <!-- Container for Success/Error Messages -->
+                <div id="alertContainer" class="h-12"></div>
+
+                <!-- Submit Button -->
+                <div>
+                    <button
+                        type="submit"
+                        id="submitButton"
+                        class="w-full flex justify-center items-center px-4 py-3 text-white font-semibold bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-indigo-400 disabled:cursor-not-allowed transition duration-150"
+                    >
+                        <!-- The text inside this span will be replaced by JS -->
+                        <span id="buttonText">Submit Appreciation</span>
+                        <!-- The loading spinner (hidden by default) -->
+                        <svg
+                            id="spinner"
+                            class="animate-spin -ml-1 mr-3 h-5 w-5 text-white hidden"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                        >
+                            <circle
+                                class="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                stroke-width="4"
+                            ></circle>
+                            <path
+                                class="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                        </svg>
+                    </button>
+                </div>
+            </form>
         </main>
 
-        <script src="script.js"></script>
+        <script>
+            // --- Get references to our HTML elements ---
+            const form = document.getElementById("appreciationForm");
+            const submitButton = document.getElementById("submitButton");
+            const buttonText = document.getElementById("buttonText");
+            const spinner = document.getElementById("spinner");
+            const alertContainer = document.getElementById("alertContainer");
+
+            // --- Listen for the form submission event ---
+            form.addEventListener("submit", async function (event) {
+                // Prevent the default browser action of reloading the page
+                event.preventDefault();
+
+                // --- 1. Set Up Loading State ---
+                submitButton.disabled = true;
+                buttonText.textContent = "Submitting...";
+                spinner.classList.remove("hidden");
+                alertContainer.innerHTML = ""; // Clear previous messages
+
+                // --- 2. Get Form Data ---
+                const formData = new FormData(form);
+                const text = formData.get("text");
+                const author_name = formData.get("author_name");
+
+                // The API endpoint we created earlier.
+                // You mentioned `/api/database`, but the Vercel function was at `/api/add-appreciation`.
+                // I'm using the latter as it's more specific.
+                const apiUrl = "/api/database";
+
+                try {
+                    // --- 3. Send Data to API ---
+                    const response = await fetch(apiUrl, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            text: text,
+                            author_name: author_name,
+                        }),
+                    });
+
+                    const result = await response.json();
+
+                    if (!response.ok) {
+                        // If the server returns an error, create an error message
+                        throw new Error(
+                            result.error || "An unknown error occurred.",
+                        );
+                    }
+
+                    // --- 4. Handle Success ---
+                    showAlert(
+                        "Your appreciation has been submitted successfully!",
+                        "success",
+                    );
+                    form.reset(); // Clear the form fields
+                } catch (error) {
+                    // --- 5. Handle Errors ---
+                    showAlert(error.message, "error");
+                } finally {
+                    // --- 6. Reset Button State (always runs) ---
+                    submitButton.disabled = false;
+                    buttonText.textContent = "Submit Appreciation";
+                    spinner.classList.add("hidden");
+                }
+            });
+
+            // --- Helper function to display messages ---
+            function showAlert(message, type) {
+                const alertClasses = {
+                    success: "bg-green-100 text-green-800",
+                    error: "bg-red-100 text-red-900",
+                };
+
+                const alertDiv = document.createElement("div");
+                alertDiv.className = `p-4 rounded-md text-sm alert-message ${alertClasses[type]}`;
+                alertDiv.setAttribute("role", "alert");
+                alertDiv.innerHTML = `<span class="font-medium">${type === "success" ? "Success!" : "Error:"}</span> ${message}`;
+
+                alertContainer.innerHTML = ""; // Clear previous alerts
+                alertContainer.appendChild(alertDiv);
+            }
+        </script>
     </body>
 </html>

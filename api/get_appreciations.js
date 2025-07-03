@@ -32,7 +32,7 @@ export default async function handler(req, res) {
     // We select the text and author_name, and order by the creation date
     // to show the newest appreciations first.
     const { data, error } = await supabaseClient
-      .from('appreciations')
+      .from('Appreciations')
       .select('text, author_name')
       .order('created_at', { ascending: false });
 

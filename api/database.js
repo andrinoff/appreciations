@@ -7,7 +7,7 @@ import { createClient } from '@supabase/supabase-js';
 
 export default async function handler(req, res) {
   // --- Set CORS Headers ---
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'https://appreciations.andrinoff.com');
   res.setHeader('Access-Control-Allow-Headers', 'authorization, x-client-info, apikey, content-type');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
 

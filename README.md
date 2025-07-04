@@ -1,37 +1,96 @@
+# Simple Appreciation Form
 
-**Appreciation Wall - Hyprland Theme**
+[![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Vercel](https://img.shields.io/badge/Powered%20by-Vercel-black?logo=vercel)](https://vercel.com)
+[![Supabase](https://img.shields.io/badge/Backend-Supabase-3ECF8E?logo=supabase)](https://supabase.io)
+[![Tailwind CSS](https://img.shields.io/badge/Styled%20with-Tailwind%20CSS-38B2AC?logo=tailwind-css)](https://tailwindcss.com)
 
-A single-page, dependency-free "Wall of Appreciation" designed with a "riced" aesthetic inspired by the Hyprland tiling window manager and the Nord color palette. It features an auto-scrolling list of testimonials that also supports smooth manual scrolling.
+A straightforward, single-page web application that allows users to submit appreciation messages. The frontend is built with plain HTML and Tailwind CSS, and the backend is powered by Vercel Serverless Functions connected to a Supabase database for persistent storage. Used in [andrinoff.com](https://andrinoff.com/aboutme)
 
-**🚀 Features**
+## 🚀 How It Works
 
-- **Hyprland-Inspired UI**: A unique design that mimics the look and feel of a customized Linux desktop environment.
-- **Frosted Glass Effect**: A modern backdrop-filter effect creates a clean, semi-transparent "widget" look.
-- **Dual Scrolling System**:
-    - Content auto-scrolls at a smooth, constant pace for passive viewing.
-    - Manual scrolling with a mouse wheel or touch is fully supported.
-    - Auto-scrolling intelligently pauses on hover or during manual interaction and resumes after a period of inactivity.
-- **Dependency-Free**: Built with vanilla HTML, CSS, and JavaScript. No frameworks, no build steps required.
-- **Seamless Loop**: The list of testimonials loops infinitely for a continuous animation.
+The project consists of two main parts:
 
-**🛠️ Built With**
+1.  **Frontend (`index.html`)**: A clean and simple form where users can type a message and an optional author name. It provides real-time feedback on submission status (loading, success, error).
+2.  **Backend (`/api`)**: Two Vercel Serverless Functions written in JavaScript that act as an intermediary between the frontend and the Supabase database.
 
-This project was built with fundamental web technologies:
+## ✨ Features
 
--   [![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
--   [![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5)
--   [![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS)
+-   **Simple Submission Form**: A user-friendly interface for submitting messages.
+-   **Anonymous Submissions**: Users can submit messages without providing a name.
+-   **Serverless Backend**: Uses Vercel Serverless Functions for scalable and cost-effective backend logic.
+-   **Persistent Storage**: Connects to a [Supabase](https://supabase.io/) project to store and retrieve appreciations.
+-   **Real-time Feedback**: The UI dynamically updates to show loading spinners and success/error messages.
+-   **Easy to Deploy**: Can be deployed in minutes on Vercel.
 
+## 🛠️ Tech Stack
 
-To customize the messages, simply edit the appreciationMessages array directly within the <script> tag in the HTML file.
+-   **Frontend**: HTML, [Tailwind CSS](https://tailwindcss.com/)
+-   **Backend**: [Vercel Serverless Functions](https://vercel.com/docs/functions) (Node.js)
+-   **Database**: [Supabase](https://supabase.io/) (PostgreSQL)
+-   **Dependencies**: `@supabase/supabase-js`
 
-**📞 Contact**
+## ⚙️ API Endpoints
+
+The backend exposes two serverless functions:
+
+-   `POST /api/database`:
+    -   Receives an appreciation message and an optional author name in the request body.
+    -   Inserts the new appreciation into the `Appreciations` table in Supabase.
+    -   **Body Parameters**:
+        -   `text` (string, required): The appreciation message.
+        -   `author_name` (string, optional): The name of the person submitting.
+
+-   `GET /api/get_appreciations`:
+    -   Fetches all records from the `Appreciations` table.
+    -   Returns an array of appreciation objects, sorted by creation date.
+
+## 🏁 Getting Started
+
+To get a local copy up and running, follow these steps.
+
+### Prerequisites
+
+-   A [Vercel](https://vercel.com/signup) account.
+-   A [Supabase](https://app.supabase.io/) account.
+-   [Node.js](https://nodejs.org/en/) installed on your machine.
+
+### Setup
+
+1.  **Clone the repository:**
+    ```sh
+    git clone [https://github.com/andrinoff/appreciations.git](https://github.com/andrinoff/appreciations.git)
+    cd appreciations
+    ```
+
+2.  **Set up Supabase:**
+    -   Create a new project on Supabase.
+    -   Inside your project, go to the **SQL Editor** and create a new table named `Appreciations`.
+    ```sql
+    CREATE TABLE "Appreciations" (
+      id uuid GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      text TEXT NOT NULL,
+      author_name TEXT
+    );
+    ```
+    -   Navigate to **Project Settings > API** and find your **Project URL** and **`anon` public key**.
+
+3.  **Set up Vercel Environment Variables:**
+    -   Fork the repository on GitHub and connect it to a new Vercel project.
+    -   In your Vercel project settings, go to **Environment Variables** and add the following:
+        -   `SUPABASE_URL`: Your Supabase Project URL.
+        -   `SUPABASE_ANON_KEY`: Your Supabase `anon` public key.
+
+4.  **Deploy:**
+    -   Vercel will automatically detect the serverless functions and deploy the project. Once deployed, you can visit the provided URL to see your appreciation form live.
+
+## 📄 License
+
+Distributed under the MIT License. See `LICENSE` for more information.
+
+## 📞 Contact
 
 Drew Smirnoff
-
-- **Email**: business@andrinoff.com
-- **GitHub**: [github.com/andrinoff](https://github.com/andrinoff)
-
-**📄 License**
-
-Distributed under the MIT License. See LICENSE for more information.
+-   **Email**: business@andrinoff.com
+-   **GitHub**: [github.com/andrinoff](https://github.com/andrinoff)
